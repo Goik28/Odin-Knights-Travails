@@ -26,8 +26,9 @@ class Knight {
     this.knightFrom = new Play(from);
     this.knightTo = new Play(to);
     this.createPath(this.knightFrom, this.knightTo);
-    const asd = this.findPath(this.knightFrom, this.knightTo);
-    console.log(asd);
+    const answer = this.pathToString(this.findPath(this.knightFrom, this.knightTo));
+    console.log("Knight path to reach "+to+" from "+from+": ");
+    console.log(answer);
   }
 
   createNextPlays(play) {
@@ -127,7 +128,17 @@ class Knight {
       return [...path];
     }
   }
+
+   pathToString(array){
+    const string = [];
+    array.reverse()
+    for (let index = 0; index < array.length; index++) {
+      const element = array[index];
+      string.push(element.coordinate);
+    }
+    return string;    
+   }
 }
 
 const knight = new Knight();
-knight.knightMoves([3, 3], [4, 3]);
+knight.knightMoves([0, 0], [0, 7]);
