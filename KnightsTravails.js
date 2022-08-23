@@ -8,7 +8,7 @@ console.log(chessBoard);*/
 
 class Play {
   coordinate = [];
-  nextPlays = [];
+  nextPlays = null;
 
   constructor(coordinate) {
     this.coordinate = coordinate;
@@ -18,7 +18,6 @@ class Play {
 class Knight {
   knightFrom = [];
   knightTo = [];
-  movesTree = [];
 
   knightMoves(from, to) {
     if (from == to) {
@@ -27,7 +26,8 @@ class Knight {
     this.knightFrom = new Play(from);
     this.knightTo = new Play(to);
     this.createPath(this.knightFrom, this.knightTo);
-    console.log("yeah");
+    const asd = this.findPath(this.knightFrom, this.knightTo);
+    console.log(asd);
   }
 
   createNextPlays(play) {
@@ -58,16 +58,26 @@ class Knight {
   }
 
   searchMove(movesTree, to) {
-    for (let index = 0; index < movesTree.length; index++) {
-      const element = movesTree[index];
-      if (
-        element.coordinate[0] == to.coordinate[0] &&
-        element.coordinate[1] == to.coordinate[1]
-      ) {
-        return true;
+    if (movesTree != null) {
+      for (let index = 0; index < movesTree.length; index++) {
+        const element = movesTree[index];
+        if (this.testMove(element, to)) {
+          return true;
+        }
       }
     }
     return false;
+  }
+
+  testMove(a, b) {
+    if (
+      a.coordinate[0] == b.coordinate[0] &&
+      a.coordinate[1] == b.coordinate[1]
+    ) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   createPath(play, to) {
@@ -83,11 +93,38 @@ class Knight {
         const element = pointer[index];
         element.nextPlays = this.createNextPlays(element);
         if (this.searchMove(element.nextPlays, to)) {
-          return console.log(element);
+          return element;
         } else {
           queue.push(element.nextPlays);
         }
       }
+    }
+  }
+
+  findPath(from, to) {
+    const path = [];
+    if (from.nextPlays == null) {
+      return false;
+    }
+    if (this.searchMove(from.nextPlays, to)) {
+      path.push(to);
+      path.push(from);
+      return path;
+    } else {
+      for (let index = 0; index < from.nextPlays.length; index++) {
+        const futurePlay = from.nextPlays[index];
+        const temp = this.findPath(futurePlay, to);
+        if (temp) {          
+          path.push(...temp);
+          break;
+        }
+      }
+    }
+    if (path.length == 0) {
+      return false;
+    } else {
+      path.push(from);      
+      return [...path];
     }
   }
 }
