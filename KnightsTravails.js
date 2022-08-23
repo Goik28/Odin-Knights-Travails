@@ -1,11 +1,3 @@
-/*const chessBoard = [];
-for (let line = 0; line < 8; line++) {
-  for (let column = 0; column < 8; column++) {
-    chessBoard.push([line, column]);
-  }
-}
-console.log(chessBoard);*/
-
 class Play {
   coordinate = [];
   nextPlays = null;
